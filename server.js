@@ -56,7 +56,7 @@ app.post('/translate', async (req, res) => {
       max_tokens: Math.min(200 + Math.floor(text.length / 4), 2048),
     });
 
-    const wordList = wordListResponse.choices[0].message.content.trim().split(/[\n,]/).map(word => word.trim()).filter(word => word && !['list', 'unique', 'base', 'forms', 'important', 'words'].includes(word.toLowerCase()));
+    const wordList = wordListResponse.choices[0].message.content.trim().split(/[\n,、]/).map(word => word.trim()).filter(word => word && !['list', 'unique', 'base', 'forms', 'important', 'words'].includes(word.toLowerCase()));
 
     // 単語ごとに意味と例文を取得
     const wordsWithDefinitions = await Promise.all(wordList.map(async (word, index) => {
