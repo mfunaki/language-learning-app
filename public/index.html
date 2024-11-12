@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Language Learning App</title>
+</head>
+<body>
+  <h1>Language Learning Web App</h1>
+  <textarea id="inputText" placeholder="Enter text to translate"></textarea><br>
+  <select id="targetLanguage">
+    <option value="Spanish">Spanish</option>
+    <option value="French">French</option>
+    <option value="Japanese">Japanese</option>
+  </select><br>
+  <button onclick="translateText()">Translate</button>
+
+  <h2>Translated Text:</h2>
+  <p id="translatedText"></p>
+
+  <script>
+    async function translateText() {
+      const text = document.getElementById("inputText").value;
+      const targetLanguage = document.getElementById("targetLanguage").value;
+
+      const response = await fetch('/translate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ text, targetLanguage })
+      });
+
+      const data = await response.json();
+      document.getElementById("translatedText").innerText = data.translatedText;
+    }
+  </script>
+</body>
+</html>
