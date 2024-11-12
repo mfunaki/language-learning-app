@@ -3,20 +3,33 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Language Learning App</title>
+  <title>Language Learning Web App</title>
 </head>
 <body>
   <h1>Language Learning Web App</h1>
-  <textarea id="inputText" placeholder="Enter text to translate"></textarea><br>
+  <textarea id="inputText" placeholder="Enter text to translate" style="width: 90%; height: 10em;"></textarea>
   <select id="targetLanguage">
+    <option value="Japanese">Japanese</option>
     <option value="Spanish">Spanish</option>
     <option value="French">French</option>
-    <option value="Japanese">Japanese</option>
   </select><br>
   <button onclick="translateText()">Translate</button>
 
   <h2>Translated Text:</h2>
   <p id="translatedText"></p>
+
+  <h2>Word List:</h2>
+  <table id="wordListTable" border="1" style="border-collapse: collapse;">
+    <thead>
+      <tr>
+        <th>No.</th>
+        <th>Word</th>
+        <th>Definition</th>
+        <th>Example</th>
+      </tr>
+    </thead>
+    <tbody id="wordListBody"></tbody>
+  </table>
 
   <script>
     async function translateText() {
@@ -33,6 +46,31 @@
 
       const data = await response.json();
       document.getElementById("translatedText").innerText = data.translatedText;
+
+      const wordListBody = document.getElementById("wordListBody");
+      wordListBody.innerHTML = ''; // 前回の結果をクリア
+
+      data.wordsWithDefinitions.forEach(wordObj => {
+        const row = document.createElement('tr');
+
+        const numberCell = document.createElement('td');
+        numberCell.innerText = wordObj.number;
+
+        const wordCell = document.createElement('td');
+        wordCell.innerText = wordObj.word;
+
+        const definitionCell = document.createElement('td');
+        definitionCell.innerText = wordObj.definition;
+
+        const exampleCell = document.createElement('td');
+        exampleCell.innerHTML = `${wordObj.example}<br><em>${wordObj.exampleTranslation || ''}</em>`; // 例文の下に翻訳された例文を表示
+
+        row.appendChild(numberCell);
+        row.appendChild(wordCell);
+        row.appendChild(definitionCell);
+        row.appendChild(exampleCell);
+        wordListBody.appendChild(row);
+      });
     }
   </script>
 </body>
